@@ -8,6 +8,9 @@
     --accent-hover: #1e40af;
     --accent-border: rgba(30,64,175,0.85);
 
+    --danger-primary: #dc2626;
+    --danger-hover: #b91c1c;
+
     --text-primary: #f0f9ff;
     --text-secondary: #bae6fd;
     --text-accent: #3b82f6;
@@ -51,6 +54,18 @@ body {
     background-color: var(--accent-primary);
     border-color: var(--accent-primary);
     color: var(--bg-primary);
+}
+
+.btn-danger {
+    background-color: transparent;
+    color: var(--danger-primary);
+    border-color: var(--danger-primary);
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+    border-color: var(--danger-hover);
+    color: var(--text-primary);
 }
 
 /* Эффекты при наведении */

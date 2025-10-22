@@ -21,12 +21,16 @@
             </button>
             
             <div class="collapse navbar-collapse gap-5" id="navbarContent">
-                <form class="d-flex me-auto my-2 my-lg-0 position-relative" role="search">
+                <form class="d-flex me-auto my-2 my-lg-0 position-relative" role="search" th:action="@{/catalog}" method="get">
                     <div class="input-group">
-                        <span class="input-group-text bg-dark border-primary text-second  position-absolute start-0 z-1 border-top border-0">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input class="form-control ps-5 bg-dark border-primary text-second  z-0" type="search" placeholder="Ищите товары...">
+                            <span class="input-group-text bg-dark border-primary text-second position-absolute start-0 z-1 border-top border-0">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        <input class="text-second form-control ps-5 bg-dark border-primary z-0"
+                               type="search"
+                               name="name"
+                               th:value="${currentName}"
+                               placeholder="Ищите товары...">
                         <button class="btn btn-accent text-dark fw-semibold" type="submit">Поиск</button>
                     </div>
                 </form>
@@ -51,7 +55,7 @@
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a class="nav-link text-center text-white" href="addProduct">
+                        <a class="nav-link text-center text-white" href="add-product">
                             <i class="bi bi-bag-plus-fill d-block fs-5"></i>
                             <small>Добавить</small>
                         </a>

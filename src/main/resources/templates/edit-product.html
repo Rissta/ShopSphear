@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopSphere - Каталог</title>
+    <title>ShopSphere - Редактирование товаров</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-<header class="sticky-top z-100">
+<header class="sticky-top">
     <nav class="navbar navbar-expand-lg navbar-dark bg-second border-bottom border-primary">
         <div class="container">
             <a class="navbar-brand fw-bold fs-3 text-accent me-4" href="/">ShopSphere</a>
@@ -20,10 +20,24 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse gap-5 d-flex justify-content-end" id="navbarContent">
+            <div class="collapse navbar-collapse gap-5" id="navbarContent">
+                <form class="d-flex me-auto my-2 my-lg-0 position-relative" role="search" th:action="@{/catalog}" method="get">
+                    <div class="input-group">
+                            <span class="input-group-text bg-dark border-primary text-second position-absolute start-0 z-1 border-top border-0">
+                                <i class="bi bi-search"></i>
+                            </span>
+                        <input class="text-second form-control ps-5 bg-dark border-primary z-0"
+                               type="search"
+                               name="name"
+                               th:value="${currentName}"
+                               placeholder="Ищите товары...">
+                        <button class="btn btn-accent text-dark fw-semibold" type="submit">Поиск</button>
+                    </div>
+                </form>
+
                 <ul class="navbar-nav gap-3">
                     <li class="nav-item">
-                        <a class="nav-link text-center text-white fw-semibold active" href="catalog">Каталог</a>
+                        <a class="nav-link text-center text-white fw-semibold" href="catalog">Каталог</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-center text-white fw-semibold" href="about">О нас</a>
@@ -35,19 +49,19 @@
 
                 <ul class="navbar-nav gap-3">
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link text-center text-white" href="login">
+                        <a class="nav-link text-center text-white active" href="login">
                             <i class="bi bi-person d-block fs-5"></i>
                             <small>Аккаунт</small>
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                        <a class="nav-link text-center text-white" href="add-product">
+                        <a class="nav-link text-center text-white active" href="add-product">
                             <i class="bi bi-bag-plus-fill d-block fs-5"></i>
                             <small>Добавить</small>
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link text-center text-white" href="cart">
+                        <a class="nav-link text-center text-white" href="cart" >
                             <i class="bi bi-cart d-block fs-5"></i>
                             <small>Корзина</small>
                         </a>
@@ -63,190 +77,139 @@
         </div>
     </nav>
 </header>
+<main class="min-vh-100 bg-prim">
+    <div class="container py-5">
+        <section class="text-center mb-5">
+            <h1 class="display-5 fw-bold text-primary mb-3">Редактирование товара</h1>
+            <p class="lead text-second">Обновите информацию о товаре в каталоге магазина</p>
+        </section>
 
-<!-- Форма оборачивает только main -->
-<form th:action="@{/catalog}" method="get" id="filterForm">
-    <!-- Скрытые поля для параметров -->
-    <input type="hidden" id="pageInput" name="page" th:value="${currentPage}">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <section class="card bg-second border-primary">
+                    <div class="card-body p-4">
+                        <h2 class="card-title h4 text-primary mb-4 pb-3 border-bottom border-primary">Информация о товаре</h2>
 
-    <main class="min-vh-100 bg-prim py-4">
-        <div class="container">
-            <div class="card bg-second border-primary mb-4">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <div class="d-flex align-items-center gap-3">
-                                <label class="text-primary fw-semibold mb-0">Сортировка:</label>
-                                <select class="form-select bg-dark border-primary text-white"
-                                        name="sort"
-                                        style="width: auto;"
-                                        th:value="${currentSort}"
-                                        >
-                                    <option value="newest">По новизне</option>
-                                    <option value="price_asc">По цене (возрастание)</option>
-                                    <option value="price_desc">По цене (убывание)</option>
-                                    <option value="popular">По популярности</option>
-                                    <option value="rating">По рейтингу</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 text-md-end">
-                            <span class="text-second" th:text="'Показано ' + ${products.size()} + ' из ' + ${totalProducts} + ' товаров'">Показано 12 из 256 товаров</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        <form class="product-form" method="post" th:action="@{/edit-product?id={id}(id=${product.id})}" th:object="${product}">                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- ID товара (только чтение) -->
+                                    <div class="mb-3">
+                                        <label for="id" class="form-label text-white fw-semibold">ID товара</label>
+                                        <input type="text" class="form-control bg-dark border-primary text-white"
+                                               id="id" th:field="*{id}" readonly>
+                                        <div class="form-text text-second">
+                                            ID товара нельзя изменить
+                                        </div>
+                                    </div>
 
-            <div class="row">
-                <aside class="col-lg-3 col-md-4 mb-4">
-                    <div class="card bg-second border-primary sticky-top z-1" style="top: 100px;">
-                        <div class="card-body">
-                            <h3 class="h4 text-primary mb-4 pb-3 border-bottom border-primary">Фильтры</h3>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label text-white fw-semibold">Название товара *</label>
+                                        <input type="text" class="form-control bg-dark border-primary text-white"
+                                               id="name" name="name" th:field="*{name}" required>
+                                    </div>
 
-                            <div class="filter-group mb-4">
-                                <h4 class="h5 text-primary mb-3">Название</h4>
-                                <input class="form-control bg-dark border-primary text-white"
-                                       type="search"
-                                       name="name"
-                                       th:value="${currentName}"
-                                       placeholder="Ищите товары...">
-                            </div>
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label text-white fw-semibold">Цена *</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control bg-dark border-primary text-white"
+                                                   id="price" name="price" th:field="*{price}" step="0.01" min="0" required>
+                                            <span class="input-group-text bg-dark border-primary text-second">₽</span>
+                                        </div>
+                                    </div>
 
-                            <div class="filter-group mb-4">
-                                <h4 class="h5 text-primary mb-3">Категории</h4>
-                                <div class="mb-4">
-                                    <select th:value="${currentCategory}" class="form-select bg-dark border-primary text-white"
-                                            id="category" name="category">
-                                        <option value="">Все категории</option>
-                                        <option th:each="category : ${productCategories}"
-                                                th:text="${category.name}"
-                                                th:value="${category.id}">Категория</option>
-                                    </select>
-                                </div>
-                            </div>
+                                    <div class="mb-3">
+                                        <label for="oldPrice" class="form-label text-white fw-semibold">Старая цена</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control bg-dark border-primary text-white"
+                                                   id="oldPrice" name="oldPrice" th:field="*{oldPrice}" step="0.01" min="0">
+                                            <span class="input-group-text bg-dark border-primary text-second">₽</span>
+                                        </div>
+                                    </div>
 
-                            <div class="filter-group mb-4">
-                                <h4 class="h5 text-primary mb-3">Цена</h4>
-                                <div class="row g-2">
-                                    <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label text-white fw-semibold">Категория *</label>
+                                        <select class="form-select bg-dark border-primary text-white"
+                                                id="category" name="category" th:field="*{category.id}" required>
+                                            <option value="" disabled>Выберите категорию</option>
+                                            <option th:each="category : ${productCategories}"
+                                                    th:text="${category.name}"
+                                                    th:value="${category.id}">Категория</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="countReviews" class="form-label text-white fw-semibold">Количество отзывов</label>
                                         <input type="number" class="form-control bg-dark border-primary text-white"
-                                               placeholder="от 0"  name="minPrice" th:value="${currentMinPrice}">
+                                               id="countReviews" name="countReviews" th:field="*{countReviews}" min="0">
                                     </div>
-                                    <div class="col-6">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="createdAt" class="form-label text-white fw-semibold">Дата создания</label>
+                                        <input type="text" class="form-control bg-dark border-primary text-white"
+                                               id="createdAt" th:value="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}" readonly>
+                                        <div class="form-text text-second">
+                                            Дата создания не может быть изменена
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="imageUrl" class="form-label text-white fw-semibold">URL изображения</label>
+                                        <input type="url" class="form-control bg-dark border-primary text-white"
+                                               id="imageUrl" name="imageUrl" th:field="*{imageUrl}">
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label text-white fw-semibold">Предпросмотр изображения</label>
+                                        <div class="border border-primary rounded bg-dark p-2 text-center" style="min-height: 120px;">
+                                            <img id="imagePreview" th:src="${product.imageUrl}" alt="Предпросмотр"
+                                                 class="img-fluid rounded" th:classappend="${product.imageUrl} ? '' : 'd-none'" style="max-height: 100px;">
+                                            <span class="text-second" id="previewText" th:classappend="${product.imageUrl} ? 'd-none' : ''">Изображение появится здесь</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="stock" class="form-label text-white fw-semibold">Количество на складе *</label>
                                         <input type="number" class="form-control bg-dark border-primary text-white"
-                                               placeholder="до 699 999" name="maxPrice" th:value="${currentMaxPrice}">
+                                               id="stock" name="stock" th:field="*{stock}" min="0" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reviews" class="form-label text-white fw-semibold">Рейтинг</label>
+                                        <input type="number" class="form-control bg-dark border-primary text-white"
+                                               id="reviews" name="reviews" th:field="*{reviews}" min="0" max="5" step="0.1">
+                                        <div class="form-text text-second">
+                                            От 0 до 5
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-accent w-100 fw-semibold mb-3">Применить фильтры</button>
-                            <a class="btn btn-outline-primary w-100 btn-sm" href="catalog-no-filter">
-                                Сбросить фильтры
-                            </a>
-                        </div>
-                    </div>
-                </aside>
 
-                <section class="col-lg-9 col-md-8">
-                    <div class="row g-3 mb-5">
-                        <div class="col-xl-4 col-lg-6 col-md-6" th:each="product : ${products}">
-                            <article class="card h-100 bg-second border-primary product-card">
-                                <div class="product-image-container position-relative">
-                                    <span class="product-badge position-absolute top-0 start-0 bg-accent text-dark m-2 px-2 py-1 rounded-pill small fw-bold"
-                                          th:if="${product.oldPrice != null and product.oldPrice > product.price}">
-                                        -<span th:text="${#numbers.formatDecimal((1 - product.price/product.oldPrice) * 100, 0, 0)}"></span>%
-                                    </span>
-                                    <img class="card-img-top product-image" src="https://avatars.mds.yandex.net/get-mpic/11620615/2a0000018d595999b442daff8699c2a57482/orig"
-                                         th:src="${product.imageUrl}"
-                                         th:alt="${product.name}"
-                                         style="height: 200px; object-fit: cover;">
+                            <div class="mb-4">
+                                <label for="description" class="form-label text-white fw-semibold">Описание товара *</label>
+                                <textarea class="form-control bg-dark border-primary text-white"
+                                          id="description" name="description" rows="4"
+                                          placeholder="Подробное описание товара..." th:field="*{description}" required></textarea>
+                                <div class="form-text text-second">
+                                    Опишите характеристики и преимущества товара
                                 </div>
-                                <div class="card-body d-flex flex-column">
-                                    <h3 class="h5 text-primary mb-2" th:text="${product.name}">Название товара</h3>
-                                    <p class="text-accent small mb-2" th:text="${product.category.name}">Категория</p>
-                                    <div class="product-rating text-warning mb-2">
-                                        <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, 5)}"
-                                           th:class="${i <= product.reviews} ? 'bi-star-fill' : 'bi-star'"></i>
-                                        <span class="text-second small ms-1" th:text="${product.countReviews}">Количество отзывов</span>
-                                    </div>
-                                    <div class="mb-3 product-price">
+                            </div>
 
-                                                <span class="current-price h5 text-primary fw-bold"
-                                                      th:text="|${#numbers.formatDecimal(product.price, 1, 2)} руб|">0 руб</span>
-                                        <span class="old-price text-second text-decoration-line-through ms-2"
-                                              th:if="${product.oldPrice != null and product.oldPrice > product.price}"
-                                              th:text="|${#numbers.formatDecimal(product.oldPrice, 1, 2)} руб|">>0 руб</span>
-
-                                    </div>
-                                    <button class="btn btn-accent mt-auto fw-semibold"
-                                            th:onclick="'addToCart(' + ${product.id} + ')'"
-                                            sec:authorize="isAuthenticated()">
-                                        В корзину
-                                    </button>
-                                    <div class="text-end mt-3" sec:authorize="hasRole('ADMIN')">
-                                        <a th:href="@{/edit-product?id={id}(id=${product.id})}" class="btn btn-outline-primary me-1">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a th:href="@{/catalog/delete?id={id}(id=${product.id})}" class="btn btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
+                            <div class="d-flex gap-3 justify-content-end">
+                                <a th:href="@{/catalog}" class="btn btn-outline-primary fw-semibold">
+                                    Отмена
+                                </a>
+                                <button type="submit" class="btn btn-accent fw-semibold px-4">
+                                    Сохранить изменения
+                                </button>
+                            </div>
+                        </form>
                     </div>
-
-                    <!-- Пагинация -->
-                    <nav aria-label="Product pagination" th:if="${totalPages > 1}">
-                        <ul class="pagination justify-content-center">
-                            <!-- Первая страница -->
-                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
-                                <a class="page-link bg-second border-primary text-primary"
-                                   th:href="${currentPage == 0} ? '#' : @{/catalog(name=${currentName}, category=${currentCategory}, sort=${currentSort}, minPrice=${currentMinPrice}, maxPrice=${currentMaxPrice}, page=0)}">
-                                    <i class="bi bi-chevron-double-left"></i>
-                                </a>
-                            </li>
-
-                            <!-- Предыдущая страница -->
-                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
-                                <a class="page-link bg-second border-primary text-primary"
-                                   th:href="${currentPage == 0} ? '#' : @{/catalog(name=${currentName}, category=${currentCategory}, sort=${currentSort}, minPrice=${currentMinPrice}, maxPrice=${currentMaxPrice}, page=${currentPage - 1})}">
-                                    <i class="bi bi-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            <!-- Номера страниц (максимум 5) -->
-                            <li class="page-item" th:each="page : ${#numbers.sequence(startPage, endPage)}"
-                                th:classappend="${page == currentPage} ? 'active' : ''">
-                                <a class="page-link"
-                                   th:classappend="${page == currentPage} ? 'bg-accent border-accent text-dark' : 'bg-second border-primary text-primary'"
-                                   th:href="@{/catalog(name=${currentName}, category=${currentCategory}, sort=${currentSort}, minPrice=${currentMinPrice}, maxPrice=${currentMaxPrice}, page=${page})}"
-                                   th:text="${page + 1}">1</a>
-                            </li>
-
-                            <!-- Следующая страница -->
-                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
-                                <a class="page-link bg-second border-primary text-primary"
-                                   th:href="${currentPage == totalPages - 1} ? '#' : @{/catalog(name=${currentName}, category=${currentCategory}, sort=${currentSort}, minPrice=${currentMinPrice}, maxPrice=${currentMaxPrice}, page=${currentPage + 1})}">
-                                    <i class="bi bi-chevron-right"></i>
-                                </a>
-                            </li>
-
-                            <!-- Последняя страница -->
-                            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
-                                <a class="page-link bg-second border-primary text-primary"
-                                   th:href="${currentPage == totalPages - 1} ? '#' : @{/catalog(name=${currentName}, category=${currentCategory}, sort=${currentSort}, minPrice=${currentMinPrice}, maxPrice=${currentMaxPrice}, page=${totalPages - 1})}">
-                                    <i class="bi bi-chevron-double-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
                 </section>
             </div>
         </div>
-    </main>
-</form>
-
-<footer class="bg-second border-top border-primary mt-5 pb-3">
+    </div>
+</main>
+<footer class="bg-second border-top border-primary mt-5 pb-3    ">
     <div class="container">
         <div class="row py-5 d-flex justify-content-between">
             <div class="col-lg-4 mb-4">
@@ -387,39 +350,39 @@
         </div>
     </div>
 </footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script th:inline="javascript">
-    function goToPage(page) {
-        document.getElementById('pageInput').value = page;
-        document.getElementById('filterForm').submit();
+<script>
+    // Предпросмотр изображения
+    document.getElementById('imageUrl').addEventListener('input', function() {
+        const preview = document.getElementById('imagePreview');
+        const previewText = document.getElementById('previewText');
+        const url = this.value;
+
+        if (url) {
+            preview.src = url;
+            preview.classList.remove('d-none');
+            previewText.classList.add('d-none');
+        } else {
+            preview.classList.add('d-none');
+            previewText.classList.remove('d-none');
+        }
+    });
+
+    // Очистка формы
+    function clearForm() {
+        document.querySelector('.product-form').reset();
+        document.getElementById('imagePreview').classList.add('d-none');
+        document.getElementById('previewText').classList.remove('d-none');
     }
 
-    function addToCart(productId) {
-        fetch('/catalog/add-to-cart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id=' + productId
-        })
-        .then(response => {
-            if (response.ok) {
-                // Можно добавить уведомление об успешном добавлении
-                console.log('Товар добавлен в корзину');
-            } else {
-                console.error('Ошибка при добавлении товара');
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-        });
-    }
-
-    function resetFilters() {
-        window.location.href = '/catalog-no-filter';
-    }
-    /*]]>*/
+    // Установка текущей даты по умолчанию
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateField = document.getElementById('createdAt');
+        if (!dateField.value) {
+            const today = new Date().toISOString().split('T')[0];
+            dateField.value = today;
+        }
+    });
 </script>
 </body>
 </html>

@@ -23,30 +23,7 @@ public class ProductCategory {
     @Column(name = "slug")
     private String slug;
 
-    @OneToMany(mappedBy = "category")
-    private List<Products> products;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public List<Products> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Products> products) {
-        this.products = products;
-    }
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Products product;
 }

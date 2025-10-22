@@ -10,6 +10,8 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -37,6 +39,10 @@ public class Products {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProductCategory category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
+
 
     @Column(name = "stock")
     private Integer stock;

@@ -24,14 +24,14 @@ public class AddProductController {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    @GetMapping("/addProduct")
+    @GetMapping("/add-product")
     public String Product(Model model) {
         List<ProductCategory> productCategories = productCategoryRepository.findAll();
         model.addAttribute("productCategories", productCategories);
-        return "addProduct";
+        return "add-product";
     }
 
-    @PostMapping("/addProduct")
+    @PostMapping("/add-product")
     public String addProduct(@RequestParam String name,
                              @RequestParam Float price,
                              @RequestParam Long category,
@@ -50,6 +50,6 @@ public class AddProductController {
         products.setImageUrl(imageUrl);
         products.setDescription(description);
         productsRepository.save(products);
-        return  "redirect:/addProduct";
+        return  "redirect:/add-product";
     }
 }

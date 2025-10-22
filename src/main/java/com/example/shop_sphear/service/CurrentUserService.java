@@ -29,19 +29,4 @@ public class CurrentUserService {
         throw new RuntimeException("User not authenticated");
     }
 
-//    // Альтернативный метод с обработкой анонимного пользователя
-//    public User getCurrentUserOrNull() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null &&
-//                authentication.isAuthenticated() &&
-//                !(authentication.getPrincipal() instanceof String)) {
-//
-//            Object principal = authentication.getPrincipal();
-//            if (principal instanceof UserDetails) {
-//                String username = ((UserDetails) principal).getUsername();
-//                return userRepository.findByUsername(username).orElse(null);
-//            }
-//        }
-//        return null;
-//    }
 }
