@@ -1,101 +1,82 @@
 <!DOCTYPE html>
-<html lang="ru"  data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ru" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopSphere - Корзина</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <header class="sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-second border-bottom border-primary">
-            <div class="container">
-                <a class="navbar-brand fw-bold fs-3 text-accent me-4" href="/">ShopSphere</a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse gap-5" id="navbarContent">
-                    <form class="d-flex me-auto my-2 my-lg-0 position-relative" role="search" th:action="@{/catalog}" method="get">
-                        <div class="input-group">
-                            <span class="input-group-text bg-dark border-primary text-second position-absolute start-0 z-1 border-top border-0">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input class="text-second form-control ps-5 bg-dark border-primary z-0"
-                                   type="search"
-                                   name="name"
-                                   th:value="${currentName}"
-                                   placeholder="Ищите товары...">
-                            <button class="btn btn-accent text-dark fw-semibold" type="submit">Поиск</button>
-                        </div>
-                    </form>
-
-                    <ul class="navbar-nav gap-3">
-                        <li class="nav-item">
-                            <a class="nav-link text-center text-white fw-semibold" href="catalog">Каталог</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-center text-white fw-semibold" href="about">О нас</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-center text-white fw-semibold" href="contact">Контакты</a>
-                        </li>
-                    </ul>
-
-                    <ul class="navbar-nav gap-3">
-                        <li class="nav-item" sec:authorize="!isAuthenticated()">
-                            <a class="nav-link text-center text-white" href="login">
-                                <i class="bi bi-person d-block fs-5"></i>
-                                <small>Аккаунт</small>
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                            <a class="nav-link text-center text-white" href="add-product">
-                                <i class="bi bi-bag-plus-fill d-block fs-5"></i>
-                                <small>Добавить</small>
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link text-center text-white active" href="cart">
-                                <i class="bi bi-cart d-block fs-5"></i>
-                                <small>Корзина</small>
-                            </a>
-                        </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link text-center text-white" href="logout">
-                                <i class="bi bi-door-open-fill d-block fs-5"></i>
-                                <small>Выход</small>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+<header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-second border-bottom border-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 text-accent me-4" href="/">ShopSphere</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse gap-5" id="navbarContent">
+                <form class="d-flex me-auto my-2 my-lg-0 position-relative" role="search" th:action="@{/catalog}" method="get">
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-primary text-second position-absolute start-0 z-1 border-top border-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input class="text-second form-control ps-5 bg-dark border-primary z-0" type="search" name="name" th:value="${currentName}" placeholder="Ищите товары...">
+                        <button class="btn btn-accent text-dark fw-semibold" type="submit">Поиск</button>
+                    </div>
+                </form>
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item"><a class="nav-link text-center text-white fw-semibold" href="catalog">Каталог</a></li>
+                    <li class="nav-item"><a class="nav-link text-center text-white fw-semibold" href="about">О нас</a></li>
+                    <li class="nav-item"><a class="nav-link text-center text-white fw-semibold" href="contact">Контакты</a></li>
+                </ul>
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link text-center text-white" href="login">
+                            <i class="bi bi-person d-block fs-5"></i>
+                            <small>Аккаунт</small>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link text-center text-white" href="add-product">
+                            <i class="bi bi-bag-plus-fill d-block fs-5"></i>
+                            <small>Добавить</small>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link text-center text-white active" href="cart">
+                            <i class="bi bi-cart d-block fs-5"></i>
+                            <small>Корзина</small>
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link text-center text-white" href="logout">
+                            <i class="bi bi-door-open-fill d-block fs-5"></i>
+                            <small>Выход</small>
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
 <main class="min-vh-100 bg-prim py-4">
     <div class="container">
-        <div class="text-center mb-5">
+        <div class="text-center mb-5" th:if="${count?:0 > 0}">
             <p class="text-second fs-5 mb-0" th:text="${count} + ' товара в корзине'"></p>
         </div>
 
         <div class="row">
             <section class="col-lg-8 col-md-7 mb-4">
-                <div class="d-flex flex-column gap-3" th:each="cartItem : ${cartItems}">
-                    <div class="card bg-second border-primary cart-item mb-2">
+                <div class="d-flex flex-column gap-3" id="cartItemsContainer">
+                    <div class="card bg-second border-primary cart-item mb-2" th:each="cartItem : ${cartItems}">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <div class="item-image rounded-3 overflow-hidden" style="width: 80px; height: 80px;">
-                                        <img src="https://avatars.mds.yandex.net/get-mpic/11620615/2a0000018d595999b442daff8699c2a57482/orig"
-                                             class="w-100 h-100 object-fit-cover"
-                                             th:src="${cartItem.product.imageUrl}"
-                                             th:alt="${cartItem.product.name}">
+                                        <img th:src="${cartItem.product.imageUrl}" th:alt="${cartItem.product.name}" class="w-100 h-100 object-fit-cover">
                                     </div>
                                 </div>
                                 <div class="col">
@@ -103,45 +84,39 @@
                                         <h3 class="h6 text-primary mb-1 fw-semibold" th:text="${cartItem.product.name}">Название</h3>
                                         <p class="text-accent small mb-1" th:text="${cartItem.product.category.name}">Категория</p>
                                         <div class="item-rating text-warning small mb-1">
-                                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, 5)}"
-                                               th:class="${i <= cartItem.product.reviews} ? 'bi-star-fill' : 'bi-star'"></i>
-                                            <span class="text-second ms-1"
-                                                  th:text="${cartItem.product.countReviews}">Количество отзывов</span>
+                                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= cartItem.product.reviews} ? 'bi-star-fill' : 'bi-star'"></i>
+                                            <span class="text-second ms-1" th:text="${cartItem.product.countReviews}">Количество отзывов</span>
                                         </div>
                                         <div class="item-availability">
-                                            <span class="badge bg-success"
-                                                  th:if="${cartItem.product.stock > 0}">В наличии</span>
-                                            <span class="badge bg-success"
-                                                  th:if="${cartItem.product.stock <= 0}">Нет в наличии</span>
+                                            <span class="badge bg-success" th:if="${cartItem.product.stock > 0}">В наличии</span>
+                                            <span class="badge bg-danger" th:if="${cartItem.product.stock <= 0}">Нет в наличии</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-auto">
                                     <div class="item-quantity d-flex align-items-center bg-dark border border-primary rounded-2 px-2 py-1">
-                                        <button class="btn btn-sm quantity-btn p-1 text-primary"
+                                        <button class="btn btn-sm quantity-btn p-1 text-primary decrease-quantity"
                                                 th:onclick="'decreaseQuantity(' + ${cartItem.id} + ')'"
                                                 th:classappend="${cartItem.quantity <= 1} ? 'opacity-50' : ''">
                                             <i class="bi bi-dash"></i>
                                         </button>
                                         <span class="quantity mx-3 text-primary fw-semibold" th:text="${cartItem.quantity}">1</span>
-                                        <button class="btn btn-sm quantity-btn p-1 text-primary"
+                                        <button class="btn btn-sm quantity-btn p-1 text-primary increase-quantity"
                                                 th:onclick="'increaseQuantity(' + ${cartItem.id} + ')'"
-                                                th:disabled="${cartItem.quantity >= cartItem.product.stock}">
-                                            <i class="bi bi-plus" ></i>
+                                                th:disabled="${cartItem.quantity >= cartItem.product.stock}"
+                                                th:attr="data-max-stock=${cartItem.product.stock}">
+                                            <i class="bi bi-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="col-auto text-end">
                                     <div class="item-price">
-                                        <div class="current-price h6 text-primary fw-bold mb-0"
-                                             th:text="|${#numbers.formatDecimal(cartItem.product.price, 1, 2)} руб|">24 999 руб</div>
-                                        <div class="old-price text-second text-decoration-line-through small"
-                                             th:if="${cartItem.product.oldPrice != null and cartItem.product.oldPrice > cartItem.product.price}"
-                                             th:text="|${#numbers.formatDecimal(cartItem.product.oldPrice, 1, 2)} руб|">29 999 руб</div>
+                                        <div class="current-price h6 text-primary fw-bold mb-0" th:text="|${#numbers.formatDecimal(cartItem.product.price, 1, 2)} руб|">24 999 руб</div>
+                                        <div class="old-price text-second text-decoration-line-through small" th:if="${cartItem.product.oldPrice != null and cartItem.product.oldPrice > cartItem.product.price}" th:text="|${#numbers.formatDecimal(cartItem.product.oldPrice, 1, 2)} руб|">29 999 руб</div>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm remove-item text-second p-2"
+                                    <button class="btn btn-sm remove-item text-second p-2 delete-product"
                                             th:onclick="'deleteProduct(' + ${cartItem.id} + ')'">
                                         <i class="bi bi-trash"></i>
                                     </button>
@@ -152,51 +127,37 @@
                 </div>
             </section>
 
-            <aside class="col-lg-4 col-md-5" th:if="${count?:0 <= 0}">
+            <aside class="col-lg-4 col-md-5" th:if="${count?:0 > 0}">
                 <div class="sticky-top z-0" style="top: 100px;">
                     <div class="card bg-second border-primary mb-3">
                         <div class="card-body">
                             <h3 class="h4 text-primary mb-4 pb-3 border-bottom border-primary">Итог заказа</h3>
-
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="text-primary" th:text="'Товары (' + ${count} + ' шт)'"></span>
                                 <span class="text-primary" th:text="${totalPrice + savings} + ' руб'">Общая цена</span>
                             </div>
-
-                            <div class="d-flex justify-content-between align-items-center mb-3"
-                                 th:if="${savings>0}">
+                            <div class="d-flex justify-content-between align-items-center mb-3" th:if="${savings>0}">
                                 <span class="text-primary">Скидка</span>
-                                <span class="text-success fw-semibold"
-                                      th:text="'-'+${savings} + ' руб'">Скидка</span>
+                                <span class="text-success fw-semibold" th:text="'-'+${savings} + ' руб'">Скидка</span>
                             </div>
-
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="text-primary">Доставка</span>
                                 <span class="text-success fw-semibold" th:if="${totalPrice>=5000}">Бесплатно</span>
                                 <span class="text-danger fw-semibold" th:if="${totalPrice<5000}">Платно</span>
-
                             </div>
-
                             <hr class="my-4 border-primary">
-
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <span class="h5 text-primary fw-bold">Итого</span>
                                 <span class="h4 text-accent fw-bold" th:text="${totalPrice} + ' руб'">50 998 руб</span>
                             </div>
-
-                            <div class="alert bg-prim text-primary d-flex align-items-center mb-4 ">
+                            <div class="alert bg-prim text-primary d-flex align-items-center mb-4">
                                 <i class="bi bi-info-circle text-success me-2"></i>
                                 <span class="small">Бесплатная доставка при заказе от 5 000 руб</span>
                             </div>
-
-                            <button class="btn btn-accent btn-lg w-100 fw-bold mb-3" th:onclick="'deleteAllProducts()'">Перейти к оформлению</button>
-
-                            <button class="btn btn-outline-primary w-100" onclick="location.href='catalog';">
-                                Продолжить покупки
-                            </button>
+                            <button class="btn btn-accent btn-lg w-100 fw-bold mb-3" onclick="deleteAllProducts()">Перейти к оформлению</button>
+                            <button class="btn btn-outline-primary w-100" onclick="location.href='catalog';">Продолжить покупки</button>
                         </div>
                     </div>
-
                     <div class="d-flex flex-column gap-2">
                         <div class="d-flex align-items-center bg-second border border-primary rounded-3 p-3">
                             <i class="bi bi-shield-check text-accent me-3 fs-5"></i>
@@ -209,9 +170,22 @@
                     </div>
                 </div>
             </aside>
+
+            <!-- Сообщение для пустой корзины (изначально скрыто) -->
+            <div class="col-12 text-center empty-cart-message" th:if="${count == 0}" style="display: none;">
+                <div class="card bg-second border-primary">
+                    <div class="card-body py-5">
+                        <i class="bi bi-cart-x text-second" style="font-size: 4rem;"></i>
+                        <h3 class="text-primary mt-3">Корзина пуста</h3>
+                        <p class="text-second mb-4">Добавьте товары из каталога</p>
+                        <a href="catalog" class="btn btn-accent btn-lg">Перейти в каталог</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
+
 <footer class="bg-second border-top border-primary mt-5 pb-3    ">
     <div class="container">
         <div class="row py-5 d-flex justify-content-between">
@@ -231,12 +205,12 @@
                             </svg>
                         </button>
                         <button class="text-second footer-social-button btn btn-dark border-primary rounded-circle d-flex align-items-center justify-content-center"
-                        style="font-size: 20px;">
-                                <i class="bi bi-telegram"></i>
+                                style="font-size: 20px;">
+                            <i class="bi bi-telegram"></i>
                         </button>
                         <button class="text-second footer-social-button btn btn-dark border-primary rounded-circle d-flex align-items-center justify-content-center"
-                        style="font-size: 20px;">
-                                <i class="bi bi-whatsapp"></i>
+                                style="font-size: 20px;">
+                            <i class="bi bi-whatsapp"></i>
                         </button>
                     </div>
                 </section>
@@ -353,99 +327,10 @@
         </div>
     </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:inline="javascript">
-        function deleteProduct(cartItemId) {
-            fetch('/cart/delete-by-id', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'cartItemId=' + cartItemId
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Удаляем элемент из DOM или обновляем страницу
-                    location.reload(); // Простой способ - перезагрузить страницу
-                } else {
-                    console.error('Ошибка при удалении товара');
-                    alert('Ошибка при удалении товара');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при удалении товара');
-            });
-        }
-        /*]]>*/
-    </script>
-    <script th:inline="javascript">
-        function deleteAllProducts() {
-            fetch('/cart/go-to-buy', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    console.error('Ошибка при очистке корзины');
-                    alert('Ошибка при очистке корзины');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при очистке корзины');
-            });
-        }
-        /*]]>*/
-    </script>
-    <script th:inline="javascript">
-        function increaseQuantity(cartItemId) {
-            fetch('/cart/increase-quantity', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'cartItemId=' + cartItemId
-            })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    console.error('Ошибка при увеличении количества');
-                    alert('Ошибка при увеличении количества');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при увеличении количества');
-            });
-        }
 
-        function decreaseQuantity(cartItemId) {
-            fetch('/cart/decrease-quantity', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'cartItemId=' + cartItemId
-            })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    console.error('Ошибка при уменьшении количества');
-                    alert('Ошибка при уменьшении количества');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при уменьшении количества');
-            });
-        }
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/notifications.js"></script>
+<script src="../static/js/cart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

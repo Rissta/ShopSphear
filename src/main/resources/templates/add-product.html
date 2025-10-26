@@ -323,38 +323,6 @@
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Предпросмотр изображения
-  document.getElementById('imageUrl').addEventListener('input', function() {
-      const preview = document.getElementById('imagePreview');
-      const previewText = document.getElementById('previewText');
-      const url = this.value;
-
-      if (url) {
-          preview.src = url;
-          preview.classList.remove('d-none');
-          previewText.classList.add('d-none');
-      } else {
-          preview.classList.add('d-none');
-          previewText.classList.remove('d-none');
-      }
-  });
-
-  // Очистка формы
-  function clearForm() {
-      document.querySelector('.product-form').reset();
-      document.getElementById('imagePreview').classList.add('d-none');
-      document.getElementById('previewText').classList.remove('d-none');
-  }
-
-  // Установка текущей даты по умолчанию
-  document.addEventListener('DOMContentLoaded', function() {
-      const dateField = document.getElementById('createdAt');
-      if (!dateField.value) {
-          const today = new Date().toISOString().split('T')[0];
-          dateField.value = today;
-      }
-  });
-</script>
+<script src="../static/js/add-product.js"></script>
 </body>
 </html>

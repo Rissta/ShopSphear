@@ -59,12 +59,14 @@ public class CartController {
     }
 
     @PostMapping("/cart/increase-quantity")
-    public String increaseQuantity(@RequestParam Long cartItemId){
+    public String increaseQuantity(@RequestParam Long cartItemId,
+                                   Model model){
         cartService.increaseQuantityById(cartItemId);
         return "redirect:/cart";
     }
     @PostMapping("/cart/decrease-quantity")
-    public String decreaseQuantity(@RequestParam Long cartItemId){
+    public String decreaseQuantity(@RequestParam Long cartItemId,
+                                   Model model){
         cartService.decreaseQuantityById(cartItemId);
         return "redirect:/cart";
     }
